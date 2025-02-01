@@ -33,13 +33,13 @@ public class MovieDao {
             rs.getInt("vote_count")                 // Récupération du nombre de votes
     );
 
-    // Méthode pour récupérer toutes les entrées de films
+
     public List<Movie> findAll() {
         String sql = "SELECT * FROM movie";
         return jdbcTemplate.query(sql, movieRowMapper);
     }
 
-    // Méthode pour récupérer un film par son ID
+
     public Movie findById(int id) {
         String sql = "SELECT * FROM movie WHERE id = ?";
         return jdbcTemplate.query(sql, movieRowMapper, id)
@@ -48,7 +48,7 @@ public class MovieDao {
                 .orElseThrow(() -> new RuntimeException("Le film avec l'ID : " + id + " n'existe pas"));
     }
 
-    // Méthode pour enregistrer un nouveau film
+
     public Movie save(Movie movie) {
         String sql = "INSERT INTO movie (title, adult, backdrop_path, genre_ids, original_language, " +
                 "original_title, overview, popularity, poster_path, video, vote_average, vote_count) " +
@@ -58,17 +58,17 @@ public class MovieDao {
                 movie.getOverview(), movie.getPopularity(), movie.getPosterPath(),
                 movie.getVideo(), movie.getVoteAverage(), movie.getVoteCount());
 
-        // Récupérer l'ID auto-généré (si applicable, par exemple pour MySQL)
+
         String sqlGetId = "SELECT LAST_INSERT_ID()";
         int id = jdbcTemplate.queryForObject(sqlGetId, Integer.class);
 
-        movie.setId(id); // Mise à jour de l'objet avec l'ID généré
+        movie.setId(id);
         return movie;
     }
 
-    // Méthode pour mettre à jour un film existant
+
     public Movie update(int id, Movie movie) {
-        if (!movieExists(id)) { // Vérification de l'existence du film
+        if (!movieExists(id)) {
             throw new RuntimeException("Le film avec l'ID : " + id + " n'existe pas");
         }
 
@@ -84,17 +84,17 @@ public class MovieDao {
             throw new RuntimeException("Échec de la mise à jour du film avec l'ID : " + id);
         }
 
-        return this.findById(id); // Retourne le film mis à jour
+        return this.findById(id);
     }
 
-    // Méthode pour supprimer un film
+
     public boolean delete(int id) {
         String sql = "DELETE FROM movie WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, id);
-        return rowsAffected > 0; // Retourne vrai si la suppression a réussi
+        return rowsAffected > 0;
     }
 
-    // Méthode privée pour vérifier si un film existe en base
+
     private boolean movieExists(int id) {
         String checkSql = "SELECT COUNT(*) FROM movie WHERE id = ?";
         int count = jdbcTemplate.queryForObject(checkSql, Integer.class, id);

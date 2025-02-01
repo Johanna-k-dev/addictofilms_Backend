@@ -18,7 +18,7 @@ public class UserDao {
     );
 
     public List<User> findAll() {
-        String sql = "SELECT * FROM user";
+        String sql = "SELECT * FROM users";
         return jdbcTemplate.query(sql, userRowMapper);
     }
     private final JdbcTemplate jdbcTemplate;
@@ -28,7 +28,7 @@ public class UserDao {
     }
 
     public User findByEmail(String email) {
-        String sql = "SELECT * FROM user WHERE email = ?";
+        String sql = "SELECT * FROM users WHERE email = ?";
         return jdbcTemplate.query(sql, userRowMapper, email)
                 .stream()
                 .findFirst()
@@ -36,7 +36,7 @@ public class UserDao {
     }
 
     public User save(User user) {
-        String sql = "INSERT INTO user (email, password) VALUES (?, ?)";
+        String sql = "INSERT INTO users (email, password) VALUES (?, ?)";
         jdbcTemplate.update(sql, user.getEmail(), user.getPassword());
 
         String sqlGetId = "SELECT LAST_INSERT_ID()";
@@ -52,7 +52,7 @@ public class UserDao {
             throw new RuntimeException("L'utilisateur avec l'EMAIL : " + email + " n'existe pas");
         }
 
-        String sql = "UPDATE user SET email = ?, password = ? WHERE email = ?";
+        String sql = "UPDATE users SET email = ?, password = ? WHERE email = ?";
         int rowsAffected = jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), email);
 
         if (rowsAffected <= 0) {
@@ -64,13 +64,13 @@ public class UserDao {
 
     // méthode utilitaire à mettre en bas du fichier
     private boolean userExists(String email) {
-        String checkSql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        String checkSql = "SELECT COUNT(*) FROM users WHERE email = ?";
         int count = jdbcTemplate.queryForObject(checkSql, Integer.class,email);
         return count > 0;
     }
 
     public boolean delete(String email) {
-        String sql = "DELETE FROM user WHERE email = ?";
+        String sql = "DELETE FROM users WHERE email = ?";
         int rowsAffected = jdbcTemplate.update(sql, email);
         return rowsAffected > 0;
     }

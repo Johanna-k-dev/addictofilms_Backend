@@ -60,7 +60,7 @@ CREATE TABLE movie_category (
 );
 
 -- Table des vues des films par utilisateur
-CREATE TABLE views (
+CREATE TABLE views_movie (
     id VARCHAR(255) PRIMARY KEY,
     user_id INT NOT NULL,
     CONSTRAINT fk_views_movie FOREIGN KEY (id) REFERENCES movie (id),
@@ -99,3 +99,6 @@ CREATE INDEX idx_user_id ON favorite_movie (user_id);
 COMMENT ON TABLE movie_category IS 'Table reliant les films aux catégories';
 COMMENT ON COLUMN movie_category.movie_id IS 'ID du film, clé étrangère vers la table movie';
 COMMENT ON COLUMN movie_category.category_id IS 'ID de la catégorie, clé étrangère vers la table category';
+COMMENT ON TABLE views_movie IS 'Table reliant les films aux visualisés';
+COMMENT ON COLUMN views_movie.id IS 'ID du film, clé étrangère vers la table views_movie'
+

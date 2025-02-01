@@ -4,56 +4,44 @@ package com.visiotech.addictofilms.models;
 
 public class MovieCategory {
 
-    private int id;  // Identifiant unique de la relation
+    private int id;
+    private int movieId;
+    private String categoryName;
+    private int userId;
 
-
-    private Movie movie;  // Référence au film
-
-
-    private Category category;  // Référence à la catégorie
-
-
-    private User userId;  // Référence à l'utilisateur
-
-    // Constructeurs
     public MovieCategory() {}
 
-    public MovieCategory(Movie movie, Category category, User userId) {
-        this.movie = movie;
-        this.category = category;
+    public MovieCategory(int id,int movieId, String category, int userId) {
+        this.id=id;
+        this.movieId = movieId;
+        this.categoryName = category;
         this.userId = userId;
     }
-
-    // Getters et Setters
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
 
-    public Movie getMovie() {
-        return movie;
+    public int getMovieId() {
+        return movieId;
+    }
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
     }
 
-    public void setMovie(Movie movie) {
-        this.movie = movie;
+    public String getCategoryName() {
+        return categoryName;
+    }
+    public void setCategoryName(String category) {
+        this.categoryName = category;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public User getUser() {
+    public int getUserId() {
         return userId;
     }
-
-    public void setUser(User user) {
-        this.userId = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }
