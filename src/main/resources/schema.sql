@@ -42,10 +42,10 @@ CREATE TABLE movie (
 
 -- Table des favoris (films préférés des utilisateurs)
 CREATE TABLE favorite_movie (
-    id VARCHAR(255) PRIMARY KEY, -- Identifiant unique
+    movie_id VARCHAR(255) PRIMARY KEY, -- Identifiant unique
     user_id INT NOT NULL,
     CONSTRAINT fk_favorite_movie_user FOREIGN KEY (user_id) REFERENCES users (id_user) ON DELETE CASCADE,
-    CONSTRAINT fk_favorite_movie_movie FOREIGN KEY (id) REFERENCES movie (id) ON DELETE CASCADE
+    CONSTRAINT fk_favorite_movie_movie FOREIGN KEY (movie_id) REFERENCES movie (movie_id) ON DELETE CASCADE
 );
 
 -- Table des relations entre films et catégories
@@ -61,7 +61,7 @@ CREATE TABLE movie_category (
 
 -- Table des vues des films par utilisateur
 CREATE TABLE views_movie (
-    id VARCHAR(255) PRIMARY KEY,
+    movie_id VARCHAR(255) PRIMARY KEY,
     user_id INT NOT NULL,
     CONSTRAINT fk_views_movie FOREIGN KEY (id) REFERENCES movie (id),
     CONSTRAINT fk_views_user FOREIGN KEY (user_id) REFERENCES users (id_user) ON DELETE CASCADE
@@ -85,7 +85,7 @@ CREATE TABLE people (
 
 -- Table des personnes favorites
 CREATE TABLE favorite_people (
-    id VARCHAR(255) PRIMARY KEY,
+    people_id VARCHAR(255) PRIMARY KEY,
     user_id INT NOT NULL,
     CONSTRAINT fk_favorite_people FOREIGN KEY (id) REFERENCES people (id),
     CONSTRAINT fk_favorite_people_user FOREIGN KEY (user_id) REFERENCES users (id_user) ON DELETE CASCADE
@@ -101,4 +101,8 @@ COMMENT ON COLUMN movie_category.movie_id IS 'ID du film, clé étrangère vers 
 COMMENT ON COLUMN movie_category.category_id IS 'ID de la catégorie, clé étrangère vers la table category';
 COMMENT ON TABLE views_movie IS 'Table reliant les films aux visualisés';
 COMMENT ON COLUMN views_movie.id IS 'ID du film, clé étrangère vers la table views_movie'
+
+
+
+
 
