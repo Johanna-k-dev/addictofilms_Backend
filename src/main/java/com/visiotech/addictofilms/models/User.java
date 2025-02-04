@@ -2,23 +2,23 @@ package com.visiotech.addictofilms.models;
 
 public class User {
 
-    private int id;
+    private Long id;
     private String email;
     private String password;
 
     public User(){}
 
-    public User (int id, String email, String password){
+    public User (Long id, String email, String password){
         this.id = id;
         this.email= email;
         this.password = password;
     }
 
-    public int getId(){
+    public Long getId(){
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

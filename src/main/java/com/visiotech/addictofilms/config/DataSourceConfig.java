@@ -1,4 +1,4 @@
-package config;
+package com.visiotech.addictofilms.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

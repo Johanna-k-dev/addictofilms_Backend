@@ -2,6 +2,8 @@ package com.visiotech.addictofilms.daos;
 
 import com.visiotech.addictofilms.exeptions.ResourceNotFoundException;
 import com.visiotech.addictofilms.models.User;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -14,9 +16,9 @@ import java.util.List;
 public class UserDao {
 
     private final JdbcTemplate jdbcTemplate;
-    static RowMapper<User> userRowMapper = (rs, rowNum) -> new User(
-            rs.getInt("id_user"),
-            rs.getString("name"),
+    private final RowMapper<User> userRowMapper = (rs, rowNum) -> new User(
+            rs.getLong("id_user"),
+            rs.getString("email"),
             rs.getString("password")
     );
 
@@ -25,12 +27,12 @@ public class UserDao {
     }
 
     public List<User> findAll() {
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM `user`";
         return jdbcTemplate.query(sql, userRowMapper);
     }
 
     public User findByEmail(String email) {
-        String sql = "SELECT * FROM users WHERE email = ?";
+        String sql = "SELECT * FROM `user` WHERE email = ?";
         return jdbcTemplate.query(sql, userRowMapper, email)
                 .stream()
                 .findFirst()
@@ -38,22 +40,13 @@ public class UserDao {
     }
 
     public User save(User user) {
-    // findByEmail
-        try{
-            String sql = "INSERT INTO users (email, password) VALUES (?, ?)";
+        try {
+            String sql = "INSERT INTO `user` (email, password) VALUES (?, ?)";
             jdbcTemplate.update(sql, user.getEmail(), user.getPassword());
-
-            String sqlGetId = "SELECT LAST_INSERT_ID()";
-            int userId = jdbcTemplate.queryForObject(sqlGetId,Integer.class);  // Correction ici
-
-            user.setId(userId);
-            return user;
-        }catch (Exception e) {
-            System.out.println(e);
-            return user;
+            return this.findByEmail(user.getEmail());
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("L'utilisateur avec l'EMAIL : " + user.getEmail() + " existe déjà");
         }
-
-
     }
 
 
@@ -62,25 +55,25 @@ public class UserDao {
             throw new ResourceNotFoundException("L'utilisateur avec l'EMAIL : " + email + " n'existe pas");
         }
 
-        String sql = "UPDATE users SET email = ?, password = ? WHERE email = ?";
+        String sql = "UPDATE `user` SET email = ?, password = ? WHERE email = ?";
         int rowsAffected = jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), email);
 
         if (rowsAffected <= 0) {
             throw new ResourceNotFoundException("Échec de la mise à jour du produit avec l'EMAIL : " + email);
         }
 
-        return this.findByEmail(email);
+        return this.findByEmail(user.getEmail());
     }
 
 
     private boolean userExists(String email) {
-        String checkSql = "SELECT COUNT(*) FROM users WHERE email = ?";
-        int count = jdbcTemplate.queryForObject(checkSql, Integer.class,email);
+        String checkSql = "SELECT COUNT(*) FROM `user` WHERE email = ?";
+        int count = jdbcTemplate.queryForObject(checkSql, Integer.class, email);
         return count > 0;
     }
 
     public boolean delete(String email) {
-        String sql = "DELETE FROM users WHERE email = ?";
+        String sql = "DELETE FROM `user` WHERE email = ?";
         int rowsAffected = jdbcTemplate.update(sql, email);
         return rowsAffected > 0;
     }

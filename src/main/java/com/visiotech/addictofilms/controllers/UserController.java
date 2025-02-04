@@ -25,7 +25,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/email")
+    @GetMapping("/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         return ResponseEntity.ok(userDao.findByEmail(email));
     }
@@ -36,13 +36,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    @PutMapping("/email")
+    @PutMapping("/{email}")
     public ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {
         User updatedUser = userDao.update(email, user);
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/email")
+    @DeleteMapping("/{email}")
     public ResponseEntity<Void> deleteUser(@PathVariable String email) {
         if (userDao.delete(email)) {
             return ResponseEntity.noContent().build();
