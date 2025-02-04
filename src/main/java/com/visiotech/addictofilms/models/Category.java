@@ -6,14 +6,12 @@ public class Category {
     private String name;
     private int userId;
 
-
     public Category() {}
     public Category(int id, String name, int userId) {
         this.id = id;
         this.name = name;
         this.userId = userId;
     }
-
 
     public int getId() {
         return id;

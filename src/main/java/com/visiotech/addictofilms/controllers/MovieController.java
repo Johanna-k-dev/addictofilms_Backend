@@ -31,7 +31,7 @@ public class MovieController {
             Movie movie = movieDao.findById(id);
             return ResponseEntity.ok(movie);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build(); // En cas d'erreur, retourne 404
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -49,7 +49,7 @@ public class MovieController {
             Movie updatedMovie = movieDao.update(id, movie);
             return ResponseEntity.ok(updatedMovie);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build(); // Si le film n'existe pas, retourne 404
+            return ResponseEntity.notFound().build();
         }
     }
 

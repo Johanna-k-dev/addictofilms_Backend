@@ -12,8 +12,5 @@ public class AddictofilmsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AddictofilmsApplication.class, args);
 	}
-	@GetMapping("")
-	public String sayHello() {
-		return "Hello World!";
-	}
+
 }

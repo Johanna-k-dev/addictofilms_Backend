@@ -1,5 +1,6 @@
 package com.visiotech.addictofilms.daos;
 
+import com.visiotech.addictofilms.exeptions.ResourceNotFoundException;
 import com.visiotech.addictofilms.models.Category;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,10 +11,12 @@ import java.util.List;
 @Repository // Annotation indiquant que cette classe est un DAO Spring
 public class CategoryDao {
     private final JdbcTemplate jdbcTemplate;
+    private final UserDao userDao;
 
     // Injection de JdbcTemplate via le constructeur (bonne pratique)
-    public CategoryDao(JdbcTemplate jdbcTemplate) {
+    public CategoryDao(JdbcTemplate jdbcTemplate, UserDao userDao) {
         this.jdbcTemplate = jdbcTemplate;
+        this.userDao = userDao;
     }
 
     // Définition du RowMapper pour convertir une ligne SQL en objet Category
@@ -35,33 +38,40 @@ public class CategoryDao {
         return jdbcTemplate.query(sql, categoryRowMapper, new Object[]{id})
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("La catégorie avec l'ID : " + id + " n'existe pas"));
+                .orElseThrow(() -> new ResourceNotFoundException("La catégorie avec l'ID : " + id + " n'existe pas"));
     }
 
     // Méthode pour enregistrer une nouvelle catégorie
     public Category save(Category category) {
-        String sql = "INSERT INTO category (name, user_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, category.getName(), category.getUserId());
+        try {
+            System.out.println(this.userDao.findAll());
+            String sql = "INSERT INTO category (name, user_id) VALUES (?, ?)";
+            jdbcTemplate.update(sql, category.getName(), category.getUserId());
+        } catch (Exception e) {
+            System.out.println(e);
+            return new Category();
+        }
 
-        // Récupérer l'ID auto-généré si applicable (MySQL)
+      /*  // Récupérer l'ID auto-généré si applicable (MySQL)
         String sqlGetId = "SELECT LAST_INSERT_ID()";
         int id = jdbcTemplate.queryForObject(sqlGetId, Integer.class);
 
-        category.setId(id); // Mise à jour de l'objet avec l'ID généré
+        category.setId(id); // Mise à jour de l'objet avec l'ID généré*/
+
         return category;
     }
 
     // Méthode pour mettre à jour une catégorie existante
     public Category update(int id, Category category) {
         if (!categoryExists(id)) { // Vérification de l'existence de la catégorie
-            throw new RuntimeException("La catégorie avec l'ID : " + id + " n'existe pas");
+            throw new ResourceNotFoundException("La catégorie avec l'ID : " + id + " n'existe pas");
         }
 
         String sql = "UPDATE category SET name = ?, user_id = ? WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, category.getName(), category.getUserId(), id);
 
         if (rowsAffected <= 0) {
-            throw new RuntimeException("Échec de la mise à jour de la catégorie avec l'ID : " + id);
+            throw new ResourceNotFoundException("Échec de la mise à jour de la catégorie avec l'ID : " + id);
         }
 
         return this.findById(id); // Retourne la catégorie mise à jour
