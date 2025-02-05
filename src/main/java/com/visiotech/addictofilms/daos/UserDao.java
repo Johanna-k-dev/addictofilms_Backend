@@ -1,14 +1,12 @@
 package com.visiotech.addictofilms.daos;
 
 import com.visiotech.addictofilms.exeptions.ResourceNotFoundException;
-import com.visiotech.addictofilms.models.User;
+import com.visiotech.addictofilms.entity.User;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,7 +17,8 @@ public class UserDao {
     private final RowMapper<User> userRowMapper = (rs, rowNum) -> new User(
             rs.getLong("id_user"),
             rs.getString("email"),
-            rs.getString("password")
+            rs.getString("password"),
+            rs.getString("role")
     );
 
     public UserDao(JdbcTemplate jdbcTemplate) {
@@ -48,7 +47,6 @@ public class UserDao {
             throw new DataIntegrityViolationException("L'utilisateur avec l'EMAIL : " + user.getEmail() + " existe déjà");
         }
     }
-
 
     public User update(String email, User user) {
         if (!userExists(email)) {

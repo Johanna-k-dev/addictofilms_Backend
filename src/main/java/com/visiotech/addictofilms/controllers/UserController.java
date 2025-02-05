@@ -1,7 +1,7 @@
 package com.visiotech.addictofilms.controllers;
 
 import com.visiotech.addictofilms.daos.UserDao;
-import com.visiotech.addictofilms.models.User;
+import com.visiotech.addictofilms.entity.User;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

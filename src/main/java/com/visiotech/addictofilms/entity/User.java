@@ -1,4 +1,4 @@
-package com.visiotech.addictofilms.models;
+package com.visiotech.addictofilms.entity;
 
 
 import jakarta.validation.constraints.NotBlank;
@@ -15,13 +15,15 @@ public class User {
     @NotBlank(message= "Vous devez renseigner un mot de passe")
     @Size(min = 8 , message = "Vous devez entrer 8 caractères minimum")
     private String password;
+    private String role;
 
     public User(){}
 
-    public User (Long id, String email, String password){
+    public User (Long id, String email, String password, String role){
         this.id = id;
         this.email= email;
         this.password = password;
+        this.role = role;
     }
 
     public Long getId(){
@@ -47,5 +49,9 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public  String getRole(){return  role;}
+
+    public void  setRole(String role){ this.role = role;}
 
 }

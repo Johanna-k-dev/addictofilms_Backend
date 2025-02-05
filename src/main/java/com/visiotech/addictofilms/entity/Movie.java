@@ -1,4 +1,4 @@
-package com.visiotech.addictofilms.models;
+package com.visiotech.addictofilms.entity;
 
 public class Movie {
     private int id; // L'identifiant unique du film

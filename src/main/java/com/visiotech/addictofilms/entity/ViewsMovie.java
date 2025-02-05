@@ -1,4 +1,4 @@
-package com.visiotech.addictofilms.models;
+package com.visiotech.addictofilms.entity;
 
 import java.time.LocalDateTime;
 
