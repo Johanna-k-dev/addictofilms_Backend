@@ -2,6 +2,7 @@ package com.visiotech.addictofilms.controllers;
 
 import com.visiotech.addictofilms.daos.UserDao;
 import com.visiotech.addictofilms.models.User;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User createdUser = userDao.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }

@@ -1,9 +1,19 @@
 package com.visiotech.addictofilms.models;
 
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+
 public class User {
 
     private Long id;
+
+    @NotBlank(message= "Vous devez renseigner une adresse email")
+    @Email(message = "le Format de l'email n'est pas valide")
     private String email;
+    @NotBlank(message= "Vous devez renseigner un mot de passe")
+    @Size(min = 8 , message = "Vous devez entrer 8 caractères minimum")
     private String password;
 
     public User(){}
