@@ -24,7 +24,6 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-
     public String generateToken(String email) {
         return Jwts.builder()
                 .setSubject(email)
@@ -41,6 +40,7 @@ public class JwtUtil {
                 .getBody()
                 .getSubject();
     }
+
     public boolean validateJwtToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -57,4 +57,5 @@ public class JwtUtil {
             throw new IllegalArgumentException("JWT claims string is empty: " + e.getMessage());
         }
     }
+
 }
