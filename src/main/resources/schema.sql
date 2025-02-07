@@ -2,8 +2,8 @@
 CREATE TABLE `user` (
     id_user INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE, -- Adresse email unique
-    password VARCHAR(255) NOT NULL -- Mot de passe
-    role VARCHAR(50) NOT NULL;
+    password VARCHAR(255) NOT NULL, -- Mot de passe
+    role VARCHAR(50) NOT NULL
 );
 
 -- Table des catégories de films
@@ -92,13 +92,3 @@ CREATE INDEX idx_email ON `user` (email);
 CREATE INDEX idx_user_id ON favorite_movie (user_id);
 CREATE INDEX idx_fav_people_user ON favorite_people (user_id);
 CREATE INDEX idx_fav_movie_user ON favorite_movie (user_id);
-
--- Ajout de commentaires
-COMMENT ON TABLE movie_category IS 'Table reliant les films aux catégories';
-COMMENT ON COLUMN movie_category.movie_id IS 'ID du film, clé étrangère vers la table movie';
-COMMENT ON COLUMN movie_category.category_id IS 'ID de la catégorie, clé étrangère vers la table category';
-COMMENT ON TABLE views_movie IS 'Table des films visualisés par les utilisateurs';
-COMMENT ON COLUMN views_movie.movie_id IS 'ID du film, clé étrangère vers la table movie';
-
-
-
