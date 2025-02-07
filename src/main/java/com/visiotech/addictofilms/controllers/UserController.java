@@ -33,9 +33,14 @@ public class UserController {
 
     @PostMapping("/add")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-        User createdUser = userDao.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        boolean isCreated = userDao.save(user);
+        if (isCreated) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
+
 
     @PutMapping("/{email}")
     public ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {

@@ -38,14 +38,10 @@ public class UserDao {
                 .orElseThrow(() -> new ResourceNotFoundException("l'utilisateur avec l'EMAIL : " + email + " n'existe pas"));
     }
 
-    public User save(User user) {
-        try {
-            String sql = "INSERT INTO `user` (email, password) VALUES (?, ?)";
-            jdbcTemplate.update(sql, user.getEmail(), user.getPassword());
-            return this.findByEmail(user.getEmail());
-        } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("L'utilisateur avec l'EMAIL : " + user.getEmail() + " existe déjà");
-        }
+    public boolean save(User user) {
+        String sql = "INSERT INTO `user` (email, password, role) VALUES (?, ?, ?)";
+        int rowsAffected = jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getRole());
+        return rowsAffected > 0;
     }
 
     public User update(String email, User user) {
@@ -75,4 +71,11 @@ public class UserDao {
         int rowsAffected = jdbcTemplate.update(sql, email);
         return rowsAffected > 0;
     }
+
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, email) > 0;
+    }
+
+
 }
